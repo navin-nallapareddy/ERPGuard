@@ -1,122 +1,201 @@
 [
+  /* === ITEMS_MASTER RULES === */
   {
     "name": "items_missing_change_control",
     "sql": "SELECT item_id FROM items_master WHERE change_control_ref IS NULL OR change_control_ref = ''",
     "message": "Item missing change control reference (ICH Q10)"
   },
   {
+    "name": "items_missing_supplier",
+    "sql": "SELECT item_id FROM items_master WHERE default_supplier IS NULL OR default_supplier = ''",
+    "message": "Item missing default supplier (traceability, ISO 13485)"
+  },
+  {
+    "name": "items_missing_revision",
+    "sql": "SELECT item_id FROM items_master WHERE revision IS NULL OR revision = ''",
+    "message": "Item missing revision control (ISO 13485 §4.2.4)"
+  },
+  {
+    "name": "items_special_process_without_change_control",
+    "sql": "SELECT item_id FROM items_master WHERE special_process IS TRUE AND (change_control_ref IS NULL OR change_control_ref = '')",
+    "message": "Special process item missing change control reference"
+  },
+  {
+    "name": "items_lot_flag_inconsistency",
+    "sql": "SELECT item_id FROM items_master WHERE lot_flag IS FALSE AND shelf_life_days IS NOT NULL",
+    "message": "Non-lot-controlled item has shelf life defined"
+  },
+  {
+    "name": "items_rework_flag_missing_cc",
+    "sql": "SELECT item_id FROM items_master WHERE rework_flag IS TRUE AND (change_control_ref IS NULL OR change_control_ref = '')",
+    "message": "Rework item missing change control link"
+  },
+  {
+    "name": "items_shelf_life_without_lot_control",
+    "sql": "SELECT item_id FROM items_master WHERE shelf_life_days IS NOT NULL AND lot_flag IS FALSE",
+    "message": "Item has shelf life but is not lot-controlled"
+  },
+  {
+    "name": "items_special_process_missing_revision",
+    "sql": "SELECT item_id FROM items_master WHERE special_process IS TRUE AND (revision IS NULL OR revision = '')",
+    "message": "Special process item missing revision info"
+  },
+
+  /* === SUPPLIERS RULES === */
+  {
     "name": "suppliers_cert_expired",
     "sql": "SELECT supplier_id FROM suppliers WHERE cert_expiry < CURRENT_DATE",
-    "message": "Supplier certification expired (ISO 13485)"
+    "message": "Supplier certification expired"
   },
   {
     "name": "supplier_not_approved",
     "sql": "SELECT supplier_id FROM suppliers WHERE approved_flag IS NOT TRUE",
-    "message": "Supplier not approved (ISO 13485)"
+    "message": "Supplier not approved"
   },
   {
     "name": "supplier_low_audit_score",
     "sql": "SELECT supplier_id FROM suppliers WHERE audit_score < 80",
-    "message": "Supplier audit score below threshold (ISO 13485)"
+    "message": "Supplier audit score below acceptable threshold"
   },
+  {
+    "name": "supplier_cert_missing",
+    "sql": "SELECT supplier_id FROM suppliers WHERE cert_expiry IS NULL",
+    "message": "Supplier missing certification expiry date"
+  },
+  {
+    "name": "supplier_high_risk_low_score",
+    "sql": "SELECT supplier_id FROM suppliers WHERE audit_score < 70 AND approved_flag IS TRUE",
+    "message": "High-risk approved supplier has very low audit score"
+  },
+
+  /* === EQUIPMENT RULES === */
   {
     "name": "equipment_calibration_overdue",
     "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due < CURRENT_DATE",
-    "message": "Equipment calibration overdue (ISO 13485)"
+    "message": "Equipment calibration overdue"
   },
   {
     "name": "critical_equipment_overdue",
-    "sql": "SELECT equipment_id FROM equipment WHERE criticality = 'High' AND calibration_next_due < CURRENT_DATE",
-    "message": "Critical equipment calibration overdue (risk-based)"
+    "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due < CURRENT_DATE AND calibration_freq = 'High'",
+    "message": "Critical equipment calibration overdue"
   },
   {
-    "name": "documents_missing_revision",
-    "sql": "SELECT doc_id FROM documents WHERE revision_history IS NULL OR revision_history = ''",
-    "message": "Document missing revision history (ISO 13485)"
+    "name": "equipment_missing_next_due",
+    "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due IS NULL",
+    "message": "Equipment missing next calibration date"
   },
   {
-    "name": "documents_unapproved",
-    "sql": "SELECT doc_id FROM documents WHERE approved_by IS NULL OR approved_at IS NULL",
-    "message": "Document not approved (ISO 13485)"
+    "name": "equipment_freq_not_defined",
+    "sql": "SELECT equipment_id FROM equipment WHERE calibration_freq IS NULL OR calibration_freq = ''",
+    "message": "Equipment missing calibration frequency"
   },
+  {
+    "name": "equipment_calibration_next_due_far",
+    "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due > CURRENT_DATE + INTERVAL '2 years'",
+    "message": "Calibration scheduled unusually far out"
+  },
+
+  /* === AUDIT TRAIL RULES === */
   {
     "name": "audit_trail_missing_user",
     "sql": "SELECT id FROM audit_trail WHERE user_id IS NULL",
-    "message": "Audit trail missing user attribution (ALCOA)"
+    "message": "Audit trail missing user attribution"
   },
   {
     "name": "audit_trail_missing_timestamp",
     "sql": "SELECT id FROM audit_trail WHERE timestamp IS NULL",
-    "message": "Audit trail missing timestamp (ALCOA)"
+    "message": "Audit trail missing timestamp"
   },
   {
     "name": "audit_trail_sequence_gap",
     "sql": "SELECT id FROM audit_trail WHERE timestamp < LAG(timestamp) OVER (ORDER BY timestamp)",
-    "message": "Audit trail sequence gap (ALCOA Consistent)"
+    "message": "Audit trail sequence gap"
   },
+
+  /* === DOCUMENTS RULES === */
+  {
+    "name": "documents_missing_revision",
+    "sql": "SELECT doc_id FROM documents WHERE revision_history IS NULL OR revision_history = ''",
+    "message": "Document missing revision history"
+  },
+  {
+    "name": "documents_unapproved",
+    "sql": "SELECT doc_id FROM documents WHERE approved_by IS NULL OR approved_at IS NULL",
+    "message": "Document not approved"
+  },
+
+  /* === CAPA RULES === */
   {
     "name": "capa_missing_root_cause",
     "sql": "SELECT capa_id FROM capa WHERE root_cause IS NULL",
-    "message": "CAPA missing root cause (ICH Q10)"
+    "message": "CAPA missing root cause"
   },
   {
     "name": "capa_missing_effectiveness",
     "sql": "SELECT capa_id FROM capa WHERE effectiveness_review IS NULL",
-    "message": "CAPA missing effectiveness review (ICH Q10)"
+    "message": "CAPA missing effectiveness review"
   },
   {
     "name": "capa_closed_without_effectiveness",
     "sql": "SELECT capa_id FROM capa WHERE closed_at IS NOT NULL AND effectiveness_review IS NULL",
-    "message": "Closed CAPA missing effectiveness review (ICH Q10)"
+    "message": "Closed CAPA missing effectiveness review"
   },
+
+  /* === DATA RECORDS (ALCOA) RULES === */
   {
     "name": "alcoa_data_missing",
     "sql": "SELECT data_id FROM data_records WHERE raw_data IS NULL",
-    "message": "Data record missing raw data (ALCOA Complete)"
+    "message": "Data record missing raw data"
   },
   {
     "name": "alcoa_data_missing_user",
     "sql": "SELECT data_id FROM data_records WHERE created_by IS NULL",
-    "message": "Data record missing user (ALCOA Attributable)"
+    "message": "Data record missing user"
   },
   {
     "name": "alcoa_data_date_mismatch",
     "sql": "SELECT data_id FROM data_records WHERE DATE(created_at) != activity_date",
-    "message": "Data not recorded contemporaneously (ALCOA Contemporaneous)"
+    "message": "Data not recorded contemporaneously"
   },
+
+  /* === USERS & TRAINING RULES === */
   {
     "name": "users_inactive_accounts",
     "sql": "SELECT user_id FROM users WHERE active_flag IS NOT TRUE",
-    "message": "Inactive user accounts exist (Part 11)"
+    "message": "Inactive user accounts exist"
   },
   {
     "name": "users_password_expired",
     "sql": "SELECT user_id FROM users WHERE password_expiry < CURRENT_DATE",
-    "message": "User password expired (Part 11 security)"
+    "message": "User password expired"
   },
   {
     "name": "training_missing",
     "sql": "SELECT user_id FROM training_records WHERE completed_on IS NULL",
-    "message": "User missing training records (ISO 13485)"
+    "message": "User missing training records"
   },
+
+  /* === PROCESS, DEVIATIONS, BATCHES === */
   {
     "name": "process_runs_missing_outcome",
     "sql": "SELECT batch_id FROM process_runs WHERE outcome IS NULL",
-    "message": "Process run missing outcome (ALCOA Complete)"
+    "message": "Process run missing outcome"
   },
   {
     "name": "deviation_without_capa",
     "sql": "SELECT deviation_id FROM deviations WHERE linked_capa IS NULL",
-    "message": "Deviation missing linked CAPA (ICH Q10)"
+    "message": "Deviation missing linked CAPA"
   },
   {
     "name": "batch_closed_with_open_processes",
     "sql": "SELECT b.batch_id FROM batches b LEFT JOIN process_runs p ON b.batch_id = p.batch_id WHERE b.closed_at IS NOT NULL AND p.outcome IS NULL",
-    "message": "Batch closed with incomplete processes (GMP consistency)"
+    "message": "Batch closed with incomplete processes"
   },
+
+  /* === BOM SIGNATURE === */
   {
     "name": "bom_missing_signature",
     "sql": "SELECT bom_id FROM boms WHERE e_sign_approval IS NOT TRUE",
-    "message": "BOM missing electronic signature (21 CFR Part 11)"
+    "message": "BOM missing electronic signature"
   }
 ]
