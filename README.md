@@ -21,6 +21,11 @@ python erpguard/reporting/generate_report.py
 streamlit run erpguard/dashboard/app.py
 ```
 
+### Upload sample data
+Use the dashboard sidebar to upload CSV files for the `items_master`,
+`suppliers` and `equipment` tables. Click **Load and Run** to populate
+the database and execute the validation rules.
+
 ### Render deployment
 ERPGuard is also ready for [Render](https://render.com) hosting. The `render.yaml`
 file provisions a free PostgreSQL 16 database named `api-db` and injects its
