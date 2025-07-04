@@ -1,1 +1,0 @@
-# ERPGuard One Pager
