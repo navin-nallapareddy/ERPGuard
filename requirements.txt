@@ -1,0 +1,5 @@
+echo "psycopg2-binary==2.9.6
+sqlalchemy==2.0.21
+pandas==2.0.3
+streamlit==1.25.0
+fpdf==1.7.2" > requirements.txt
