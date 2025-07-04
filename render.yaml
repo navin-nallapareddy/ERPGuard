@@ -2,6 +2,7 @@ services:
   - type: web
     name: erpguard-dashboard
     env: python
+    pythonVersion: 3.11
     plan: free
     buildCommand: |
       pip install --upgrade pip==23.2.1 setuptools==65.5.0
@@ -16,6 +17,7 @@ services:
   - type: worker
     name: erpguard-compliance-runner
     env: python
+    pythonVersion: 3.11
     plan: free
     buildCommand: |
       pip install --upgrade pip==23.2.1 setuptools==65.5.0
