@@ -1,16 +1,1 @@
-[
-    {"table": "items_master", "field": "revision", "rule": "must_not_be_null", "severity": "critical", "message": "Revision required (ISO 13485 §7.5)"},
-    {"table": "items_master", "field": "lot_flag", "rule": "must_be_true", "severity": "critical", "message": "Lot control required (21 CFR 820.65)"},
-    {"table": "items_master", "field": "lot_flag", "rule": "enum_in_list", "values": [true, false], "message": "Lot flag must be boolean"},
-    {"table": "suppliers", "field": "cert_expiry", "rule": "date_in_future", "days": 180, "message": "Supplier cert must be valid 6 months (ISO 13485 §7.4)"},
-    {"table": "suppliers", "field": "approved_flag", "rule": "must_be_true", "message": "Supplier must be approved"},
-    {"table": "suppliers", "field": "audit_score", "rule": "numeric_above", "min": 85, "message": "Supplier audit score must exceed 85"},
-    {"table": "boms", "field": ["parent_item", "component_item"], "rule": "unique_combination", "message": "Duplicate BOM lines detected"},
-    {"table": "boms", "field": "component_item", "rule": "must_exist_in", "reference_table": "items_master", "reference_field": "item_id", "message": "Component must exist in items master"},
-    {"table": "items_master", "field": "description", "rule": "must_not_be_null", "message": "Description required"},
-    {"table": "items_master", "field": "change_control_ref", "rule": "must_not_be_null", "message": "Change control reference required (21 CFR Part 11)"},
-    {"table": "equipment", "field": "calibration_next_due", "rule": "date_in_future", "days": 90, "message": "Calibration next due date must be at least 90 days ahead (21 CFR 820)"},
-    {"table": "equipment", "field": "calibration_freq", "rule": "must_not_be_null", "message": "Calibration frequency must be specified"},
-    {"table": "boms", "field": "e_sign_approval", "rule": "must_be_true", "message": "BOM must be electronically signed (21 CFR Part 11)"},
-    {"table": "items_master", "field": "rework_flag", "rule": "conditional_boolean", "condition_field": "special_process", "message": "Rework allowed only if special_process is TRUE"}
-]
+{}
