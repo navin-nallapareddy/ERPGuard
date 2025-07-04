@@ -1,0 +1,4 @@
+equipment_id,calibration_next_due,calibration_freq
+EQ-001,2099-12-31,12M
+EQ-002,2000-01-01,6M
+EQ-003,2099-06-30,12M

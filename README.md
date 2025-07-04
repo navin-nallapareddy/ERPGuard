@@ -24,7 +24,8 @@ streamlit run erpguard/dashboard/app.py
 ### Upload sample data
 Use the dashboard sidebar to upload CSV files for the `items_master`,
 `suppliers` and `equipment` tables. Click **Load and Run** to populate
-the database and execute the validation rules.
+the database and execute the validation rules. A set of example CSVs is
+provided in the `samples` directory for quick testing.
 
 ### Render deployment
 ERPGuard is also ready for [Render](https://render.com) hosting. The `render.yaml`
