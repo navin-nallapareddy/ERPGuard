@@ -1,47 +1,122 @@
 [
   {
-    "name": "audit_trail_missing_user",
-    "sql": "SELECT id FROM audit_trail WHERE performed_by IS NULL",
-    "message": "Audit trail missing user attribution (ALCOA: Attributable)"
+    "name": "items_missing_change_control",
+    "sql": "SELECT item_id FROM items_master WHERE change_control_ref IS NULL OR change_control_ref = ''",
+    "message": "Item missing change control reference (ICH Q10)"
   },
   {
-    "name": "audit_trail_missing_timestamp",
-    "sql": "SELECT id FROM audit_trail WHERE performed_at IS NULL",
-    "message": "Audit trail missing timestamp (ALCOA: Contemporaneous)"
+    "name": "suppliers_cert_expired",
+    "sql": "SELECT supplier_id FROM suppliers WHERE cert_expiry < CURRENT_DATE",
+    "message": "Supplier certification expired (ISO 13485)"
+  },
+  {
+    "name": "supplier_not_approved",
+    "sql": "SELECT supplier_id FROM suppliers WHERE approved_flag IS NOT TRUE",
+    "message": "Supplier not approved (ISO 13485)"
+  },
+  {
+    "name": "supplier_low_audit_score",
+    "sql": "SELECT supplier_id FROM suppliers WHERE audit_score < 80",
+    "message": "Supplier audit score below threshold (ISO 13485)"
+  },
+  {
+    "name": "equipment_calibration_overdue",
+    "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due < CURRENT_DATE",
+    "message": "Equipment calibration overdue (ISO 13485)"
+  },
+  {
+    "name": "critical_equipment_overdue",
+    "sql": "SELECT equipment_id FROM equipment WHERE criticality = 'High' AND calibration_next_due < CURRENT_DATE",
+    "message": "Critical equipment calibration overdue (risk-based)"
   },
   {
     "name": "documents_missing_revision",
     "sql": "SELECT doc_id FROM documents WHERE revision_history IS NULL OR revision_history = ''",
-    "message": "Document missing revision history (ISO 13485 §4.2.4)"
+    "message": "Document missing revision history (ISO 13485)"
   },
   {
     "name": "documents_unapproved",
     "sql": "SELECT doc_id FROM documents WHERE approved_by IS NULL OR approved_at IS NULL",
-    "message": "Document not approved (ISO 13485 §4.2.4)"
+    "message": "Document not approved (ISO 13485)"
+  },
+  {
+    "name": "audit_trail_missing_user",
+    "sql": "SELECT id FROM audit_trail WHERE user_id IS NULL",
+    "message": "Audit trail missing user attribution (ALCOA)"
+  },
+  {
+    "name": "audit_trail_missing_timestamp",
+    "sql": "SELECT id FROM audit_trail WHERE timestamp IS NULL",
+    "message": "Audit trail missing timestamp (ALCOA)"
+  },
+  {
+    "name": "audit_trail_sequence_gap",
+    "sql": "SELECT id FROM audit_trail WHERE timestamp < LAG(timestamp) OVER (ORDER BY timestamp)",
+    "message": "Audit trail sequence gap (ALCOA Consistent)"
   },
   {
     "name": "capa_missing_root_cause",
     "sql": "SELECT capa_id FROM capa WHERE root_cause IS NULL",
-    "message": "CAPA missing root cause (ICH Q10 §3.2.4)"
+    "message": "CAPA missing root cause (ICH Q10)"
   },
   {
     "name": "capa_missing_effectiveness",
     "sql": "SELECT capa_id FROM capa WHERE effectiveness_review IS NULL",
-    "message": "CAPA missing effectiveness review (ICH Q10 §3.2.4)"
+    "message": "CAPA missing effectiveness review (ICH Q10)"
   },
   {
-    "name": "alcoa_incomplete_data",
+    "name": "capa_closed_without_effectiveness",
+    "sql": "SELECT capa_id FROM capa WHERE closed_at IS NOT NULL AND effectiveness_review IS NULL",
+    "message": "Closed CAPA missing effectiveness review (ICH Q10)"
+  },
+  {
+    "name": "alcoa_data_missing",
     "sql": "SELECT data_id FROM data_records WHERE raw_data IS NULL",
-    "message": "Data record missing raw data (ALCOA: Complete)"
+    "message": "Data record missing raw data (ALCOA Complete)"
   },
   {
-    "name": "alcoa_attributable_missing_user",
+    "name": "alcoa_data_missing_user",
     "sql": "SELECT data_id FROM data_records WHERE created_by IS NULL",
-    "message": "Data record missing created_by (ALCOA: Attributable)"
+    "message": "Data record missing user (ALCOA Attributable)"
   },
   {
-    "name": "alcoa_contemporaneous_date_mismatch",
+    "name": "alcoa_data_date_mismatch",
     "sql": "SELECT data_id FROM data_records WHERE DATE(created_at) != activity_date",
-    "message": "Data not recorded contemporaneously (ALCOA: Contemporaneous)"
+    "message": "Data not recorded contemporaneously (ALCOA Contemporaneous)"
+  },
+  {
+    "name": "users_inactive_accounts",
+    "sql": "SELECT user_id FROM users WHERE active_flag IS NOT TRUE",
+    "message": "Inactive user accounts exist (Part 11)"
+  },
+  {
+    "name": "users_password_expired",
+    "sql": "SELECT user_id FROM users WHERE password_expiry < CURRENT_DATE",
+    "message": "User password expired (Part 11 security)"
+  },
+  {
+    "name": "training_missing",
+    "sql": "SELECT user_id FROM training_records WHERE completed_on IS NULL",
+    "message": "User missing training records (ISO 13485)"
+  },
+  {
+    "name": "process_runs_missing_outcome",
+    "sql": "SELECT batch_id FROM process_runs WHERE outcome IS NULL",
+    "message": "Process run missing outcome (ALCOA Complete)"
+  },
+  {
+    "name": "deviation_without_capa",
+    "sql": "SELECT deviation_id FROM deviations WHERE linked_capa IS NULL",
+    "message": "Deviation missing linked CAPA (ICH Q10)"
+  },
+  {
+    "name": "batch_closed_with_open_processes",
+    "sql": "SELECT b.batch_id FROM batches b LEFT JOIN process_runs p ON b.batch_id = p.batch_id WHERE b.closed_at IS NOT NULL AND p.outcome IS NULL",
+    "message": "Batch closed with incomplete processes (GMP consistency)"
+  },
+  {
+    "name": "bom_missing_signature",
+    "sql": "SELECT bom_id FROM boms WHERE e_sign_approval IS NOT TRUE",
+    "message": "BOM missing electronic signature (21 CFR Part 11)"
   }
 ]
