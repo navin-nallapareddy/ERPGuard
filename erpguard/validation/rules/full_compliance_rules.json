@@ -1,5 +1,4 @@
 [
-  /* === ITEMS_MASTER RULES === */
   {
     "name": "items_missing_change_control",
     "sql": "SELECT item_id FROM items_master WHERE change_control_ref IS NULL OR change_control_ref = ''",
@@ -40,8 +39,6 @@
     "sql": "SELECT item_id FROM items_master WHERE special_process IS TRUE AND (revision IS NULL OR revision = '')",
     "message": "Special process item missing revision info"
   },
-
-  /* === SUPPLIERS RULES === */
   {
     "name": "suppliers_cert_expired",
     "sql": "SELECT supplier_id FROM suppliers WHERE cert_expiry < CURRENT_DATE",
@@ -67,8 +64,6 @@
     "sql": "SELECT supplier_id FROM suppliers WHERE audit_score < 70 AND approved_flag IS TRUE",
     "message": "High-risk approved supplier has very low audit score"
   },
-
-  /* === EQUIPMENT RULES === */
   {
     "name": "equipment_calibration_overdue",
     "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due < CURRENT_DATE",
@@ -94,8 +89,6 @@
     "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due > CURRENT_DATE + INTERVAL '2 years'",
     "message": "Calibration scheduled unusually far out"
   },
-
-  /* === AUDIT TRAIL RULES === */
   {
     "name": "audit_trail_missing_user",
     "sql": "SELECT id FROM audit_trail WHERE user_id IS NULL",
@@ -111,8 +104,6 @@
     "sql": "SELECT id FROM audit_trail WHERE timestamp < LAG(timestamp) OVER (ORDER BY timestamp)",
     "message": "Audit trail sequence gap"
   },
-
-  /* === DOCUMENTS RULES === */
   {
     "name": "documents_missing_revision",
     "sql": "SELECT doc_id FROM documents WHERE revision_history IS NULL OR revision_history = ''",
@@ -123,8 +114,6 @@
     "sql": "SELECT doc_id FROM documents WHERE approved_by IS NULL OR approved_at IS NULL",
     "message": "Document not approved"
   },
-
-  /* === CAPA RULES === */
   {
     "name": "capa_missing_root_cause",
     "sql": "SELECT capa_id FROM capa WHERE root_cause IS NULL",
@@ -140,8 +129,6 @@
     "sql": "SELECT capa_id FROM capa WHERE closed_at IS NOT NULL AND effectiveness_review IS NULL",
     "message": "Closed CAPA missing effectiveness review"
   },
-
-  /* === DATA RECORDS (ALCOA) RULES === */
   {
     "name": "alcoa_data_missing",
     "sql": "SELECT data_id FROM data_records WHERE raw_data IS NULL",
@@ -157,8 +144,6 @@
     "sql": "SELECT data_id FROM data_records WHERE DATE(created_at) != activity_date",
     "message": "Data not recorded contemporaneously"
   },
-
-  /* === USERS & TRAINING RULES === */
   {
     "name": "users_inactive_accounts",
     "sql": "SELECT user_id FROM users WHERE active_flag IS NOT TRUE",
@@ -174,8 +159,6 @@
     "sql": "SELECT user_id FROM training_records WHERE completed_on IS NULL",
     "message": "User missing training records"
   },
-
-  /* === PROCESS, DEVIATIONS, BATCHES === */
   {
     "name": "process_runs_missing_outcome",
     "sql": "SELECT batch_id FROM process_runs WHERE outcome IS NULL",
@@ -191,8 +174,6 @@
     "sql": "SELECT b.batch_id FROM batches b LEFT JOIN process_runs p ON b.batch_id = p.batch_id WHERE b.closed_at IS NOT NULL AND p.outcome IS NULL",
     "message": "Batch closed with incomplete processes"
   },
-
-  /* === BOM SIGNATURE === */
   {
     "name": "bom_missing_signature",
     "sql": "SELECT bom_id FROM boms WHERE e_sign_approval IS NOT TRUE",
