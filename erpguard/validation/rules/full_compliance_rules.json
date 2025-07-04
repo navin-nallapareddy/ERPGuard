@@ -1,1 +1,17 @@
-{}
+[
+  {
+    "name": "items_missing_change_control",
+    "sql": "SELECT item_id FROM items_master WHERE change_control_ref IS NULL OR change_control_ref = ''",
+    "message": "Item missing change control reference"
+  },
+  {
+    "name": "suppliers_cert_expired",
+    "sql": "SELECT supplier_id FROM suppliers WHERE cert_expiry < CURRENT_DATE",
+    "message": "Supplier certification expired"
+  },
+  {
+    "name": "equipment_calibration_overdue",
+    "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due < CURRENT_DATE",
+    "message": "Equipment calibration overdue"
+  }
+]
