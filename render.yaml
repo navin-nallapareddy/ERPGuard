@@ -4,13 +4,13 @@ services:
     env: python
     plan: free
     buildCommand: |
-  echo "FILES IN ROOT:"
-  ls -l
-  echo "CONTENTS OF runtime.txt:"
-  cat runtime.txt || echo "runtime.txt not found"
-  pip install --upgrade pip
-  pip install poetry
-  poetry install
+      echo "FILES IN ROOT:"
+      ls -l
+      echo "CONTENTS OF runtime.txt:"
+      cat runtime.txt || echo "runtime.txt not found"
+      pip install --upgrade pip
+      pip install poetry
+      poetry install
     startCommand: "poetry run streamlit run erpguard/dashboard/app.py --server.port $PORT --server.address 0.0.0.0"
     envVars:
       - key: DATABASE_URL
