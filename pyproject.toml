@@ -1,3 +1,9 @@
+[tool.poetry]
+name = "erpguard"
+version = "0.1.0"
+description = "ERPGuard compliance dashboard and automation"
+authors = ["Your Name <your@email.com>"]
+
 [tool.poetry.dependencies]
 python = "^3.11"
 psycopg2-binary = "2.9.6"
@@ -6,3 +12,7 @@ pandas = "2.0.3"
 streamlit = "1.24.0"
 fpdf = "1.7.2"
 pillow = "9.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
