@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from erpguard.compliance_summary import generate_summary
+from erpguard.compliance_summary import generate_summary_by_category
 from erpguard.database.loader import load_dataframe
 from erpguard.validation.rules_engine import run_rules
 
@@ -25,8 +25,14 @@ if st.sidebar.button("Load and Run"):
     run_rules()
     st.sidebar.success("Data loaded and rules executed")
 
-summary = generate_summary()
-for rule, data in summary.items():
-    passes = data.get("PASS", 0)
-    fails = data.get("FAIL", 0)
-    st.write(f"**{rule}**: {passes} pass, {fails} fail")
+summary_df = generate_summary_by_category()
+if not summary_df.empty:
+    categories = summary_df["category"].unique()
+    tabs = st.tabs(categories)
+    for category, tab in zip(categories, tabs):
+        cat_df = summary_df[summary_df["category"] == category][[
+            "rule_name",
+            "PASS",
+            "FAIL",
+        ]]
+        tab.table(cat_df.set_index("rule_name"))
