@@ -25,7 +25,11 @@ if st.sidebar.button("Load and Run"):
     run_rules()
     st.sidebar.success("Data loaded and rules executed")
 
+EXCLUDED_CATEGORIES = {"suppliers", "critical"}
+
 summary_df = generate_summary_by_category()
+summary_df = summary_df[~summary_df["category"].isin(EXCLUDED_CATEGORIES)]
+
 if not summary_df.empty:
     categories = summary_df["category"].unique().tolist()
     tabs = st.tabs(categories)
