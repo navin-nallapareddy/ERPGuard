@@ -1,0 +1,4 @@
+supplier_id,name,cert_expiry,approved_flag,audit_score
+SUP-001,Supplier A,2099-12-31,TRUE,95
+SUP-002,Supplier B,2000-01-01,FALSE,70
+SUP-003,Supplier C,2099-12-31,TRUE,88

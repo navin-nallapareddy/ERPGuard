@@ -1,0 +1,4 @@
+item_id,description,revision,lot_flag,shelf_life_days,default_supplier,change_control_ref,rework_flag,special_process
+ITEM-001,Sample item 1,A,TRUE,365,SUP-001,CC-001,FALSE,FALSE
+ITEM-002,Sample item 2,B,FALSE,,SUP-002,,TRUE,TRUE
+ITEM-003,Sample item 3,C,TRUE,180,SUP-003,CC-003,FALSE,FALSE
