@@ -4,10 +4,10 @@ services:
     env: python
     plan: free
     buildCommand: |
-  echo "SHOWING FILES IN ROOT:"
-  ls -la
-  echo "SHOWING CONTENTS OF runtime.txt"
-  cat runtime.txt || echo "NO runtime.txt found"
+  echo "FILES IN ROOT:"
+  ls -l
+  echo "CONTENTS OF runtime.txt:"
+  cat runtime.txt || echo "runtime.txt not found"
   pip install --upgrade pip
   pip install poetry
   poetry install
