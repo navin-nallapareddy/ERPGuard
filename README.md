@@ -50,4 +50,8 @@ MIT or proprietary — your choice.
 ```bash
 export $(cat .env | xargs)
 ```
-3. Run your compliance checks as shown in the usage section.
+3. Initialize the database schema:
+```bash
+python -m erpguard.database.init_db
+```
+4. Run your compliance checks as shown in the usage section.
