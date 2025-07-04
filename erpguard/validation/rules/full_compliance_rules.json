@@ -89,3 +89,4 @@
     "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due > CURRENT_DATE + INTERVAL '2 years'",
     "message": "Calibration scheduled unusually far out"
   }
+]
