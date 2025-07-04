@@ -30,3 +30,20 @@ streamlit run dashboard/app.py
 
 ## License
 MIT or proprietary — your choice.
+
+## 🚀 Local development instructions
+
+1. Copy `sample.env` to `.env` and update with your Postgres credentials.
+
+2. Load environment variables:
+```bash
+export $(cat .env | xargs)
+```
+
+3. Run your compliance checks:
+```bash
+python erpguard/validation/rules_engine.py
+python erpguard/compliance_summary.py
+python erpguard/reporting/generate_report.py
+streamlit run erpguard/dashboard/app.py
+```
