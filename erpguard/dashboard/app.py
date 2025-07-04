@@ -27,7 +27,7 @@ if st.sidebar.button("Load and Run"):
 
 summary_df = generate_summary_by_category()
 if not summary_df.empty:
-    categories = summary_df["category"].unique()
+    categories = summary_df["category"].unique().tolist()
     tabs = st.tabs(categories)
     for category, tab in zip(categories, tabs):
         cat_df = summary_df[summary_df["category"] == category][[
