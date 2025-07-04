@@ -1,17 +1,47 @@
 [
   {
-    "name": "items_missing_change_control",
-    "sql": "SELECT item_id FROM items_master WHERE change_control_ref IS NULL OR change_control_ref = ''",
-    "message": "Item missing change control reference"
+    "name": "audit_trail_missing_user",
+    "sql": "SELECT id FROM audit_trail WHERE performed_by IS NULL",
+    "message": "Audit trail missing user attribution (ALCOA: Attributable)"
   },
   {
-    "name": "suppliers_cert_expired",
-    "sql": "SELECT supplier_id FROM suppliers WHERE cert_expiry < CURRENT_DATE",
-    "message": "Supplier certification expired"
+    "name": "audit_trail_missing_timestamp",
+    "sql": "SELECT id FROM audit_trail WHERE performed_at IS NULL",
+    "message": "Audit trail missing timestamp (ALCOA: Contemporaneous)"
   },
   {
-    "name": "equipment_calibration_overdue",
-    "sql": "SELECT equipment_id FROM equipment WHERE calibration_next_due < CURRENT_DATE",
-    "message": "Equipment calibration overdue"
+    "name": "documents_missing_revision",
+    "sql": "SELECT doc_id FROM documents WHERE revision_history IS NULL OR revision_history = ''",
+    "message": "Document missing revision history (ISO 13485 §4.2.4)"
+  },
+  {
+    "name": "documents_unapproved",
+    "sql": "SELECT doc_id FROM documents WHERE approved_by IS NULL OR approved_at IS NULL",
+    "message": "Document not approved (ISO 13485 §4.2.4)"
+  },
+  {
+    "name": "capa_missing_root_cause",
+    "sql": "SELECT capa_id FROM capa WHERE root_cause IS NULL",
+    "message": "CAPA missing root cause (ICH Q10 §3.2.4)"
+  },
+  {
+    "name": "capa_missing_effectiveness",
+    "sql": "SELECT capa_id FROM capa WHERE effectiveness_review IS NULL",
+    "message": "CAPA missing effectiveness review (ICH Q10 §3.2.4)"
+  },
+  {
+    "name": "alcoa_incomplete_data",
+    "sql": "SELECT data_id FROM data_records WHERE raw_data IS NULL",
+    "message": "Data record missing raw data (ALCOA: Complete)"
+  },
+  {
+    "name": "alcoa_attributable_missing_user",
+    "sql": "SELECT data_id FROM data_records WHERE created_by IS NULL",
+    "message": "Data record missing created_by (ALCOA: Attributable)"
+  },
+  {
+    "name": "alcoa_contemporaneous_date_mismatch",
+    "sql": "SELECT data_id FROM data_records WHERE DATE(created_at) != activity_date",
+    "message": "Data not recorded contemporaneously (ALCOA: Contemporaneous)"
   }
 ]
