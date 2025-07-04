@@ -26,6 +26,9 @@ Use the dashboard sidebar to upload CSV files for the `items_master`,
 `suppliers` and `equipment` tables. Click **Load and Run** to populate
 the database and execute the validation rules. A set of example CSVs is
 provided in the `samples` directory for quick testing.
+For convenience `items_master_columns.csv` and `suppliers_columns.csv`
+list every column in their respective tables so the headers always match
+the database schema.
 
 ### Render deployment
 ERPGuard is also ready for [Render](https://render.com) hosting. The `render.yaml`
