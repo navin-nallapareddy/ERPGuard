@@ -4,9 +4,10 @@ services:
     env: python
     plan: free
     buildCommand: |
-      pip install --upgrade pip==23.2.1 setuptools==65.5.0
-      pip install -r requirements.txt
-    startCommand: "streamlit run erpguard/dashboard/app.py --server.port $PORT --server.address 0.0.0.0"
+      pip install --upgrade pip
+      pip install poetry
+      poetry install
+    startCommand: "poetry run streamlit run erpguard/dashboard/app.py --server.port $PORT --server.address 0.0.0.0"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -18,9 +19,13 @@ services:
     env: python
     plan: free
     buildCommand: |
-      pip install --upgrade pip==23.2.1 setuptools==65.5.0
-      pip install -r requirements.txt
-    startCommand: "python erpguard/validation/rules_engine.py && python erpguard/compliance_summary.py && python erpguard/reporting/generate_report.py"
+      pip install --upgrade pip
+      pip install poetry
+      poetry install
+    startCommand: >
+      poetry run python erpguard/validation/rules_engine.py &&
+      poetry run python erpguard/compliance_summary.py &&
+      poetry run python erpguard/reporting/generate_report.py
     envVars:
       - key: DATABASE_URL
         fromDatabase:
