@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  erpguard-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: compliance_db
+      POSTGRES_USER: youruser
+      POSTGRES_PASSWORD: yourpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - erpguard_pgdata:/var/lib/postgresql/data
+volumes:
+  erpguard_pgdata:
